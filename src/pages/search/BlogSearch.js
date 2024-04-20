@@ -1,0 +1,58 @@
+import styled from "styled-components";
+import BlogItem from "../../components/common/BlogItem";
+import { MRegular32, LBold32 } from "../../components/style/Styled";
+
+const BlogSearch = () => {
+    return(
+        <div>
+            <Wrap>
+                <Left> 블로그 검색 결과 </Left>
+                <Right><Num>1</Num>건</Right>
+            </Wrap>
+            <PageWrap>
+            {[...Array(1)].map((_, index) => (
+                    <BlogItem key={index} />
+                ))}
+            </PageWrap>
+        </div>
+    );
+};
+
+export default BlogSearch;
+
+const PageWrap = styled.div`
+    margin: 0rem 6.25rem;
+    /* box-sizing: border-box; */
+
+/* 
+    @media ${({ theme }) => theme.windowSize.test} {
+        background-color: pink;
+    } */
+`
+const Wrap = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    padding: 2.5rem 7rem 0rem 7rem;
+`
+const Left = styled(MRegular32)`
+    display: flex;
+    padding: 1.25rem 0rem;
+    align-items: flex-start;
+    gap: 0.625rem;
+
+    color: var(--black, #000);
+`
+const Right = styled(MRegular32)`
+    display: flex;
+    padding: 1.25rem 0rem;
+    align-items: flex-end;
+    gap: 0.375rem;
+
+    color: var(--gray_bold, #4A4A4A);
+`
+
+const Num = styled(LBold32)`
+    color: var(--black, #000);
+`
