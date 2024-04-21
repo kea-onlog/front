@@ -1,13 +1,10 @@
 name: deploy GAE
 
 on:
-  ## Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [master]
   pull_request:
     branches: [master]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -17,20 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Google Cloud SDK를 초기화하기 위한 단계 추가
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0  # 수정된 부분: 명시적인 버전 사용
         with:
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ secrets.PROJECT_ID }}
+          export_default_credentials: true  # 수정된 부분: 기본 자격증명으로 내보냄
 
-      # client-secret.json 파일을 생성하는 단계는 더 이상 필요하지 않습니다.
-      # Google Cloud SDK가 이미 초기화되어 있으며, 서비스 계정 키가 환경 변수를 통해 제공됩니다.
-
-      - name: Publish app to Google App Engine
+      - name: Deploy to Google App Engine
         run: |
           gcloud config set project ${{ secrets.PROJECT_ID }}
           gcloud -q app deploy app.yaml --promote
-
-          # cron 작업이 필요한 경우
-          # gcloud -q app deploy cron.yaml
+          # gcloud -q app deploy cron.yaml  # 필요한 경우 주석 해제
