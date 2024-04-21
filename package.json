@@ -24,8 +24,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "next start -p 8080",
+    "build": "next build",
+    "deploy": "yarn build && gcloud app deploy",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject"
   },
