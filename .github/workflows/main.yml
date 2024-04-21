@@ -10,33 +10,27 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Initialize Google Cloud SDK
-        uses: zxyle/publish-gae-action@master
+      # Google Cloud SDK를 초기화하기 위한 단계 추가
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ secrets.PROJECT_ID }}
-          # An optional variables parameter can be used
-          gae_variables: ${{ secrets.GAE_VARIABLES }}
+
+      # client-secret.json 파일을 생성하는 단계는 더 이상 필요하지 않습니다.
+      # Google Cloud SDK가 이미 초기화되어 있으며, 서비스 계정 키가 환경 변수를 통해 제공됩니다.
 
       - name: Publish app to Google App Engine
         run: |
-          # This client-secret.json is converted by GCP_SA_KEY.
-          gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
           gcloud config set project ${{ secrets.PROJECT_ID }}
           gcloud -q app deploy app.yaml --promote
 
-          # Suppose you need a cron task.
+          # cron 작업이 필요한 경우
           # gcloud -q app deploy cron.yaml
